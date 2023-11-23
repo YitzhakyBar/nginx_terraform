@@ -163,13 +163,16 @@ resource "aws_route_table_association" "public_subnet_assoc2" {
   route_table_id = aws_route_table.nginx_route_table_igw.id
 }
 
-
+resource "aws_key_pair" "key_pair" {
+  key_name   = "key-pair"
+  public_key = file("~/.ssh/key-pair.pub")
+}
 
 # create a ec2 1
 resource "aws_instance" "nginx_ec2" {
   ami                         = "ami-0416c18e75bd69567" #amazon linux 2
   instance_type               = "t3.micro"
-  key_name                    = "devops_key.pem"
+  key_name                    = aws_key_pair.key_pair.key_name
   subnet_id                   = aws_subnet.nginx_public_subnet1.id
   vpc_security_group_ids      = [aws_security_group.ec2_security_group.id]
   associate_public_ip_address = true
