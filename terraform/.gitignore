@@ -1,0 +1,3 @@
+creds.tf
+*terraform.*
+*.pem
